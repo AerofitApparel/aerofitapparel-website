@@ -24,11 +24,11 @@ export function FirebaseAppCheckProvider({ children }: FirebaseAppCheckProviderP
             throw new Error("Firebase app initialization failed")
           }
 
-          // Enable debug mode in development BEFORE any other App Check code
+          // Skip App Check initialization in development
           if (process.env.NODE_ENV === "development") {
-            // @ts-ignore - This is a valid property but TypeScript doesn't know about it
-            window.FIREBASE_APPCHECK_DEBUG_TOKEN = true
-            console.log("Firebase App Check debug mode enabled for development")
+            console.log("🔧 Development mode: App Check initialization skipped")
+            setIsAppCheckInitialized(true)
+            return
           }
 
           // Fetch the reCAPTCHA site key from our API
@@ -36,13 +36,10 @@ export function FirebaseAppCheckProvider({ children }: FirebaseAppCheckProviderP
           const data = await response.json()
           const siteKey = data.siteKey
           const isConfigured = data.isConfigured
-          const isDevelopment = data.isDevelopment
 
           // Check if site key is available
           if (!siteKey) {
-            console.warn(
-              "Firebase App Check: No reCAPTCHA site key found. App Check will not be initialized. Authentication may still work without App Check in development.",
-            )
+            console.warn("Firebase App Check: No reCAPTCHA site key found. App Check will not be initialized.")
             return
           }
 

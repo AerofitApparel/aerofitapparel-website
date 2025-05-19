@@ -5,6 +5,7 @@ import { Inter } from "next/font/google"
 import { AuthProvider } from "@/context/auth-context"
 import { ThemeProvider } from "@/components/theme-provider"
 import { FirebaseAppCheckProvider } from "@/components/firebase-app-check-provider"
+import { DevModeIndicator } from "@/components/dev-mode-indicator"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           <FirebaseAppCheckProvider>
             <AuthProvider>{children}</AuthProvider>
           </FirebaseAppCheckProvider>
+          <DevModeIndicator />
         </ThemeProvider>
       </body>
     </html>
